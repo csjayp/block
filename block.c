@@ -11,7 +11,9 @@
  */
 #include <sys/types.h>
 
+#ifdef __FreeBSD__
 #include <libgeom.h>
+#endif
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -43,6 +45,7 @@ char fmt[32];
 static off_t
 get_disk_size(char *dev)
 {
+#ifdef __FreeBSD__
 	int gfd;
 	off_t sz;
 
@@ -52,6 +55,11 @@ get_disk_size(char *dev)
 	sz = g_mediasize(gfd);
 	(void) close(gfd);
 	return (sz);
+#else
+	(void) fprintf(stderr, "Not supported on this OS yet\n");
+	exit(1);
+	/* NOT REACHED */
+#endif
 }
 
 int
