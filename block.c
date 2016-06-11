@@ -87,8 +87,6 @@ main(int argc, char *argv [])
 		}
 	argc -= optind;
 	argv += optind;
-	dsize = get_disk_size(argv[0]);
-	tbytes = npasses * (rflag ? 6 : 4) * dsize;
 	if (argc != 1) {
 		(void) fprintf(stderr, "Usage: diskwipe [-v] [-b <blocksize>k] </dev/disk>]\n");
 		(void) fprintf(stderr, "       -v   Be verbose\n");
@@ -97,6 +95,8 @@ main(int argc, char *argv [])
 		(void) fprintf(stderr, "       -b   Specify block size in 'k' kilobytes\n");
 		exit(1);
 	}
+	dsize = get_disk_size(argv[0]);
+	tbytes = npasses * (rflag ? 6 : 4) * dsize;
 	if (rflag) {
 		rfd = open("/dev/random", O_RDONLY);
 		if (rfd < 0) {
