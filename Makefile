@@ -3,7 +3,7 @@
 PREFIX?=/usr/local
 CFLAGS+=	-pipe -O2 -Wall -g
 OBJS=	block.c
-LIBS=	-lm
+LIBS=	-lgeom
 CC?=	cc
 TARGETS=	block
 
