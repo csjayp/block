@@ -16,14 +16,16 @@
 #endif
 
 #include <stdio.h>
+#include <err.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdint.h>
 
 static off_t blocksize = 4096;
-off_t cbytes, tbytes;
+uintmax_t cbytes, tbytes;
 static int npasses = 1;
 static int verbose;
 static int rflag;
@@ -33,7 +35,7 @@ char fmt[32];
 #define P_PROGRESS() do {						\
 	cbytes += blocksize;						\
 	if ((k++ % 100) == 0 || cbytes == tbytes) {			\
-		printf(" %s pattern: 0x%02X %lld/%lld Mb (%.0f%%) complete\r",	\
+		printf(" %s pattern: 0x%02X %ju/%ju Mb (%.0f%%) complete\r",	\
 		    (p % 2) == 0 ? "*" : " ",			\
 		    b, cbytes / (1024 * 1024), tbytes / (1024 *1024),	\
 		    100 * ((float)cbytes / (float)tbytes));		\
@@ -67,7 +69,7 @@ main(int argc, char *argv [])
 {
 	unsigned char *block1, *block2, *block3, *block4, *rblock;
 	int rfd, fd, error, j, ch, k, p;
-	u_int64_t bc;
+	uintmax_t bc;
 	u_char b;
 
 	while ((ch = getopt(argc, argv, "b:vn:r")) != -1)
@@ -155,7 +157,7 @@ main(int argc, char *argv [])
 			P_PROGRESS();
 		}
 		if (verbose)
-			(void) fprintf(stdout, "%llu bytes written\n", bc);
+			(void) fprintf(stdout, "%ju bytes written\n", bc);
                 if (lseek(fd, 0UL, SEEK_SET) < 0) {
                         (void) fprintf(stderr, "lseek\n");
                         exit(1);
@@ -179,7 +181,7 @@ main(int argc, char *argv [])
 			P_PROGRESS();
 		}
 		if (verbose)
-			(void) fprintf(stdout, "%llu bytes written\n", bc);
+			(void) fprintf(stdout, "%ju bytes written\n", bc);
                 if (lseek(fd, 0UL, SEEK_SET) < 0) {
                         (void) fprintf(stderr, "lseek\n");
                         exit(1);
@@ -207,7 +209,7 @@ main(int argc, char *argv [])
 				P_PROGRESS();
 			}
 			if (verbose)
-				(void) fprintf(stdout, "%llu bytes written\n", bc);
+				(void) fprintf(stdout, "%ju bytes written\n", bc);
 			if (lseek(fd, 0UL, SEEK_SET) < 0) {
 				(void) fprintf(stderr, "lseek\n");
 				exit(1);
@@ -232,7 +234,7 @@ main(int argc, char *argv [])
 			P_PROGRESS();
 		}
 		if (verbose)
-			(void) fprintf(stdout, "%llu bytes written\n", bc);
+			(void) fprintf(stdout, "%ju bytes written\n", bc);
                 if (lseek(fd, 0UL, SEEK_SET) < 0) {
                         (void) fprintf(stderr, "lseek\n");
                         exit(1);
@@ -260,7 +262,7 @@ main(int argc, char *argv [])
 			exit(1);
 		}
 		if (verbose)
-			(void) fprintf(stdout, "%llu bytes written\n", bc);
+			(void) fprintf(stdout, "%ju bytes written\n", bc);
 		if (rflag) {
 			if (verbose)
 				(void) fprintf(stdout,
@@ -284,7 +286,7 @@ main(int argc, char *argv [])
 				P_PROGRESS();
 			}
 			if (verbose)
-				(void) fprintf(stdout, "%llu bytes written\n", bc);
+				(void) fprintf(stdout, "%ju bytes written\n", bc);
 			if (lseek(fd, 0UL, SEEK_SET) < 0) {
 				(void) fprintf(stderr, "lseek\n");
 				exit(1);
