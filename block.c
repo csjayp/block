@@ -7,7 +7,6 @@
  * ----------------------------------------------------------------------------
  *
  * This utilily [attempts] meets U.S. DoD 5220.22-M Standard for Disk Sanitization.
- *
  */
 #include <sys/types.h>
 
